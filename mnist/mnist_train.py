@@ -1,14 +1,17 @@
 import torch
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
-from model import Network
+from mnist_model import Network,nn
+import torch.optim as optim
+
 
 print("PyTorch 版本:", torch.__version__)
 print("CUDA 是否可用:", torch.cuda.is_available())
 print("当前使用的 CUDA 版本:", torch.version.cuda)
 print("GPU 设备名称:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "无 GPU")
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"正在使用{device}计算")
 if __name__ == '__main__':
     """数据读取"""
     transform = transforms.Compose([
@@ -32,6 +35,22 @@ if __name__ == '__main__':
     print("完数据读取")
 
 
-    model = Network()
+    model = Network().to(device)#神经网络
+    optimizer = optim.Adam(model.parameters())#优化器
+    criterion = nn.CrossEntropyLoss()#损失函数
+    for epoch in range(10):
+        for batch_idx, (data, label) in enumerate(train_loader):
+            data = data.to(device)
+            label = label.to(device)
+            output = model(data)
+            loss = criterion(output, label)
+            optimizer.step()
+            optimizer.zero_grad()
 
+            if batch_idx % 100 == 0:
+                print(f"| 训练轮数:{epoch + 1}/{10}",
+                      f"| batch:{batch_idx}/{len(train_loader)}",
+                      f"| Loss:{loss.item()} |")
 
+    torch.save(model.state_dict(), "mnist.pth")
+    print("训练完成")
