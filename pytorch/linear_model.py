@@ -45,3 +45,10 @@ for epoch in range(epochs):
 
 
 print("LOss",loss)
+
+
+
+
+
+
+

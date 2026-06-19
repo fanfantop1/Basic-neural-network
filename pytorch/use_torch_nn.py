@@ -44,5 +44,51 @@ word_embedding = vocab_layer(word)
 print(word_embedding)
 
 
+#nn层归一化
+norm_layer = torch.nn.LayerNorm(normalized_shape=vocab_dim)
+norm_layer_features = norm_layer(word_embedding)
+print(norm_layer_features)
+
+#nn.dropout
+dorpout = torch.nn.Dropout(0.6)
+input = torch.ones(5,5)
+
+
+dorpout.train()
+dropout_train = dorpout(input)
+print(dropout_train)
+
+
+#nn.Moudle
+
+
+class Linear_Moudle(torch.nn.Module):
+    def __init__(self, in_put, out_put):
+        super().__init__()
+        self.Linear = torch.nn.Linear(in_put, out_put)
+
+    def forward(self, x):
+        return self.Linear(x)
+
+
+
+
+print(linear)
+
+
+#nn.optim
+
+learning_rate = 0.01
+optimizer = torch.optim.Adam(linear.parameters(), lr=learning_rate)
+loss_func = torch.nn.MSELoss()
+
+
+
+
+
+
+
+
+
 
 
