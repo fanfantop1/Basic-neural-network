@@ -74,3 +74,34 @@ class fanfanMindConfig(PretrainedConfig):
             if self.inference_rope_scaling
             else None
         )
+
+
+
+"""
+    RMNorm代码逻辑
+    1.创建nn.Module
+    2.__init__(self)初始化类的实例。它在创建对象时自动调用
+    3.编写RMSNorm类，继承nn.Module类
+    4.编写forward方法，定义前向传播的计算逻辑
+"""
+
+import torch
+import torch.nn as nn
+
+
+class RMSNorm(nn.Module):
+    def __init__(self, dim, eps:float=1e-5):
+        super().__init__()
+        self.dim = dim
+        self.eps = eps
+        self.weight = nn.Parameter(torch.ones(dim))
+
+    def _norm(self,x):
+        return torch.rsqrt(x.pow(2).mean(-1, keepdim=True)+torch.tensor(self.eps))
+
+    def forward(self,x):
+        return self.weight*self._norm(x.float()).type_as(x)*x
+
+
+
+
