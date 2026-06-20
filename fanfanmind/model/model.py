@@ -5,8 +5,8 @@ from transformers import PretrainedConfig
 
 
 
-class MokioMindConfig(PretrainedConfig):
-    model_type = "mokiomind"
+class fanfanMindConfig(PretrainedConfig):
+    model_type = "fanfanmind"
 
     def __init__(
         self,
